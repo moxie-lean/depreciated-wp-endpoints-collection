@@ -1,7 +1,7 @@
 <?php namespace Lean\Endpoints;
 
 /**
- * Class that allw some helper functions to Sanitize elements.
+ * Class that provides some helper functions to Sanitize elements.
  *
  * @package Lean\Endpoints
  */
