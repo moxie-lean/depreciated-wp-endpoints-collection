@@ -1,5 +1,5 @@
 {
-  "name": "moxie-leean/wp-endpoints-archive",
+  "name": "moxie-lean/wp-endpoints-archive",
   "description": "wp-endpoints-archive",
   "keywords": [],
   "homepage": "https://github.com/moxie-leean/wp-endpoints-archive",
@@ -16,7 +16,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Leean\\": "src/"
+      "Lean\\": "src/"
     }
   },
   "require-dev": {
