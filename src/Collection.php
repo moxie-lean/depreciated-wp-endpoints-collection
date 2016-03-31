@@ -1,7 +1,9 @@
 <?php namespace Lean\Endpoints;
 
 use Leean\AbstractEndpoint;
+
 use Lean\Endpoints\Collection\Sanitize;
+use Lean\Endpoints\Collection\Filter;
 
 /**
  * Class that returns a collection of posts using dynamic arguments.
@@ -37,6 +39,15 @@ class Collection extends AbstractEndpoint {
 	protected $query = null;
 
 	/**
+	 * Flag used to carry the value of the filter and avoid to call the function
+	 * N times inside of the loop.
+	 *
+	 * @since 0.1.0
+	 * @var bool
+	 */
+	protected $format_item = false;
+
+	/**
 	 * Function inherint from the parant Abstract class that is called once the
 	 * endpoint has been initiated and the method that returns the data delivered
 	 * to the endpoint.
@@ -61,19 +72,36 @@ class Collection extends AbstractEndpoint {
 	 */
 	protected function loop() {
 		$data = [];
+
 		$this->query = new \WP_Query( $this->args );
+		$this->format_item = apply_filters( Filter::ITEM_IS_ENABLED, false );
+
 		while ( $this->query->have_posts() ) {
 			$this->query->the_post();
-			$data[] = [
-				'id' => $this->query->post->ID,
-				'title' => $this->query->post->post_title,
-			];
+			$data[] = $this->format_item( $this->query->post );
 		}
 		wp_reset_postdata();
+
 		return [
 			'data' => $data,
 			'pagination' => $this->get_pagination(),
 		];
+	}
+
+	/**
+	 * This function allow to format every item that is returned to the endpoint
+	 * the filter sends 3 params to the user so can be more easy to manipulate the
+	 * data based on certaim params.
+	 *
+	 * @param \WP_Post $the_post Current post object.
+	 * @return array The formated data from every item.
+	 */
+	protected function format_item( \WP_Post $the_post ) {
+		$item = [ 'id' => $the_post->ID ];
+		if ( $this->format_item ) {
+			$item = apply_filters( Filter::ITEM_FORMAT, $item, $the_post, $this->args );
+		}
+		return $item;
 	}
 
 	/**
