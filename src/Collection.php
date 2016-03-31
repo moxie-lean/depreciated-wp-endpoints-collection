@@ -23,10 +23,18 @@ class Collection extends AbstractEndpoint {
 	/**
 	 * Array that holds all the shared arguments used for query the site.
 	 *
-	 * @var array
 	 * @since 0.1.0
+	 * @var array
 	 */
 	protected $args = [];
+
+	/**
+	 * Object that holds the current queried object on the site.
+	 *
+	 * @since 0.1.0
+	 * @var \WP_Query
+	 */
+	protected $query = null;
 
 	/**
 	 * Function inherint from the parant Abstract class that is called once the
@@ -53,16 +61,38 @@ class Collection extends AbstractEndpoint {
 	 */
 	protected function loop() {
 		$data = [];
-		$custom_query = new \WP_Query( $this->args );
-		while ( $custom_query->have_posts() ) {
-			$custom_query->the_post();
+		$this->query = new \WP_Query( $this->args );
+		while ( $this->query->have_posts() ) {
+			$this->query->the_post();
 			$data[] = [
-				'id' => $custom_query->post->ID,
-				'title' => $custom_query->post->post_title,
+				'id' => $this->query->post->ID,
+				'title' => $this->query->post->post_title,
 			];
 		}
 		wp_reset_postdata();
-		return $data;
+		return [
+			'data' => $data,
+			'pagination' => $this->get_pagination(),
+		];
+	}
+
+	/**
+	 * Returns the data related with the pagination, useful to
+	 * iterate over the data in the FE on a infinite scroll or load more
+	 * buttons since we know if there are more pages ahead.
+	 *
+	 * @return array The array with the formated data.
+	 */
+	protected function get_pagination() {
+		$total = absint( $this->query->found_posts );
+		$meta = [
+			'items' => $total,
+			'pages' => 0,
+		];
+		if ( $total > 0 ) {
+			$meta['pages'] = $this->query->max_num_pages;
+		}
+		return $meta;
 	}
 
 	/**
