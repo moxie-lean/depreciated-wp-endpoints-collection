@@ -54,7 +54,7 @@ of the WP_Query params in order to update your results, for example by
 default uses setting that specifies the number of reading post on the
 settings page.
 
-## Examples of usage
+## Request examples
 
 Get only the latest 3 posts.
 
@@ -131,8 +131,8 @@ before. This filter has different params.
   access to the ID, title, content or any other data of the current
 item.
 - `$args`, this are the arguments used to create the request, for
-  example here you can get what post type was requested, basically the
-GET params that create the endpoint.
+  example here you can get what post type was requested, (basically the
+`GET` params that create the endpoint).
 
 For example imagine you want to return a message if the post has the ID
 1 and the default format otherwise.
