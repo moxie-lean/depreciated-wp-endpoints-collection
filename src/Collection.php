@@ -17,16 +17,25 @@ class Collection extends AbstractEndpoint {
 	 * @var String
 	 */
 	protected $endpoint = '/collection';
+	protected $args = [];
 
 	public function endpoint_callback( \WP_REST_Request $request ) {
-		$args = wp_parse_args( $request->get_query_params(), $request->get_default_params() );
-		$custom_query = new \WP_Query( $args );
+		$this->args = $request->get_params();
+		return $this->filter_data( $this->loop() );
+	}
+
+	protected function loop() {
+		$data = [];
+		$custom_query = new \WP_Query( $this->args );
 		while ( $custom_query->have_posts() ) {
 			$custom_query->the_post();
-			$data[] = $custom_query->post;
+			$data[] = [
+				'id' => $custom_query->post->ID,
+				'title' => $custom_query->post->post_title,
+			];
 		}
 		wp_reset_postdata();
-		return $this->filter_data( $data );
+		return $data;
 	}
 
 	public function endpoint_args() {
@@ -39,6 +48,22 @@ class Collection extends AbstractEndpoint {
 					} else {
 						return sanitize_text_field( $post_type );
 					}
+				},
+			],
+			'post_status' => [
+				'default' => 'publish',
+				'validate_callback' => function( $post_status ) {
+					return 'publish' === $post_status;
+				},
+			],
+			'has_password' => [
+				'validate_callback' => function() {
+					return false;
+				},
+			],
+			'post_password' => [
+				'validate_callback' => function() {
+					return false;
 				},
 			],
 		];
