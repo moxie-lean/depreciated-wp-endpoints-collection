@@ -139,7 +139,7 @@ class Collection extends AbstractEndpoint {
 				'default' => 'post',
 				'sanitize_callback' => function( $post_type ) {
 					if ( is_array( $post_type ) ) {
-						return Sanitize::text_array( $post_type );
+						return array_map( 'sanitize_text_field', $post_type );
 					} else {
 						return sanitize_text_field( $post_type );
 					}
