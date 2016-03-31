@@ -49,7 +49,7 @@ The default URL is:
 /wp-json/leean/v1/collection
 ```
 
-By default the collection is the list of all the posts, you can use most
+By default the collection is the list of posts, you can use most
 of the WP_Query params in order to update your results, for example by
 default uses setting that specifies the number of reading post on the
 settings page.
