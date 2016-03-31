@@ -87,6 +87,19 @@ Get all the posts and pages published on the site.
 wp-json/leean/v1/collection?post_type[]=post&post_type[]=page
 ```
 
+Get the first and second page of the blog section.
+
+```json
+wp-json/leean/v1/collection
+wp-json/leean/v1/collection?paged=2
+```
+
+Get all the posts that has the category ID 2
+
+```json
+wp-json/leean/v1/collection?cat=2
+```
+
 ## Filters
 
 There are 3 filters that can be used on this particular endpoint.
@@ -117,6 +130,12 @@ enable the format filter you need change this filter as follows:
 ```php
 add_filter( 'ln_collection_enable_filter_format', '__return_true' );
 ```
+
+The filter has 2 params: 
+
+- `$enable_filter`, by default is false,
+- `$args` The arguments that were used to create the endpoint so you can
+  return dynamically the value based on the query made to the endpoint.
 
 And if you want to disable the format you only need to remove the
 filter.
