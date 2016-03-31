@@ -1,8 +1,8 @@
 {
-  "name": "moxie-leean/wp-endpoints-archive",
-  "description": "wp-endpoints-archive",
-  "keywords": [],
-  "homepage": "https://github.com/moxie-leean/wp-endpoints-archive",
+  "name": "moxie-lean/wp-endpoints-collection",
+  "description": "Query against a WordPress site and get a JSON response with a collection of data associated with your request.",
+  "keywords": [ "wordpress", "wordpress API" ],
+  "homepage": "https://github.com/moxie-leean/wp-endpoints-collection",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -12,11 +12,12 @@
     }
   ],
   "require": {
-    "php": ">=5.4"
+    "php": ">=5.4",
+    "moxie-leean/wp-endpoint": "^0.2.0"
   },
   "autoload": {
     "psr-4": {
-      "Leean\\": "src/"
+      "Lean\\Endpoints\\": "src/"
     }
   },
   "require-dev": {
@@ -33,8 +34,7 @@
     "post-install-cmd": [ "@installSniffer" ],
     "post-update-cmd": [ "@installSniffer" ],
     "ci": [
-      "phpcs src/*.php src/**/*.php"
+      "phpcs src/*.php src/*/*.php"
     ]
   }
 }
-
