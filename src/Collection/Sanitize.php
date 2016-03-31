@@ -1,4 +1,4 @@
-<?php namespace Lean\Endpoints;
+<?php namespace Lean\Endpoints\Collection;
 
 /**
  * Class that provides some helper functions to Sanitize elements.

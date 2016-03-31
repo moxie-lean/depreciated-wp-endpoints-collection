@@ -1,7 +1,7 @@
 <?php namespace Lean\Endpoints;
 
 use Leean\AbstractEndpoint;
-use Lean\Endpoints\Sanitize;
+use Lean\Endpoints\Collection\Sanitize;
 
 /**
  * Class that returns a collection of posts using dynamic arguments.
