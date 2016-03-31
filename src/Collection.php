@@ -72,7 +72,7 @@ class Collection extends AbstractEndpoint {
 		$data = [];
 
 		$this->query = new \WP_Query( $this->args );
-		$this->format_item = apply_filters( Filter::ITEM_IS_ENABLED, false );
+		$this->format_item = apply_filters( Filter::ITEM_IS_ENABLED, false, $this->args );
 
 		while ( $this->query->have_posts() ) {
 			$this->query->the_post();
