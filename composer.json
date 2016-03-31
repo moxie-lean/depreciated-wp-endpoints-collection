@@ -1,8 +1,8 @@
 {
-  "name": "moxie-lean/wp-endpoints-archive",
-  "description": "wp-endpoints-archive",
-  "keywords": [],
-  "homepage": "https://github.com/moxie-leean/wp-endpoints-archive",
+  "name": "moxie-lean/wp-endpoints-collection",
+  "description": "Query against a WordPress site and get a JSON response with a collection of data associated with your request.",
+  "keywords": [ "wordpress", "wordpress API" ],
+  "homepage": "https://github.com/moxie-leean/wp-endpoints-collection",
   "type": "library",
   "license": "MIT",
   "authors": [

@@ -8,18 +8,18 @@
 The easiest way to install this package is by using composer from your terminal:
 
 ```bash
-composer require moxie-lean/wp-endpoints-archive
+composer require moxie-lean/wp-endpoints-collection
 ```
 
 Or by adding the following lines on your `composer.json` file
 
 ```json
 "require": {
-  "moxie-lean/wp-endpoints-archive": "dev-master"
+  "moxie-lean/wp-endpoints-collection": "dev-master"
 }
 ```
 
-This will download the files from the [packagist site](https://packagist.org/packages/moxie-lean/wp-endpoints-archive)
+This will download the files from the [packagist site](https://packagist.org/packages/moxie-lean/wp-endpoints-collection)
 and set you up with the latest version located on master branch of the repository.
 
 After that you can include the `autoload.php` file in order to

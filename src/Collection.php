@@ -1,8 +1,6 @@
 <?php namespace Lean\Endpoints;
 
 use Leean\AbstractEndpoint;
-
-use Lean\Endpoints\Collection\Sanitize;
 use Lean\Endpoints\Collection\Filter;
 
 /**
