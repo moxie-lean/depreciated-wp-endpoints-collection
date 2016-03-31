@@ -57,14 +57,10 @@ class Collection extends AbstractEndpoint {
 				},
 			],
 			'has_password' => [
-				'validate_callback' => function() {
-					return false;
-				},
+				'validate_callback' => '__return_false',
 			],
 			'post_password' => [
-				'validate_callback' => function() {
-					return false;
-				},
+				'validate_callback' => '__return_false',
 			],
 		];
 	}
