@@ -109,7 +109,7 @@ add_filter('ln_endpoints_data_collection', function( $data ){
 });
 ```
 
-`ln_collection_enable_filter_format`. By default the format of the items
+`ln_endpoints_collection_enable_filter_format`. By default the format of the items
 is disabled, in order to prevent not required functions if you don't
 require to format the default output of the endpoint, if you want to
 enable the format filter you need change this filter as follows:
@@ -121,8 +121,8 @@ add_filter( 'ln_collection_enable_filter_format', '__return_true' );
 And if you want to disable the format you only need to remove the
 filter.
 
-`ln_collection_item_format`. This filter is executed only if
-`ln_collection_enable_filter_format` has been updated as mentioned
+`ln_endpoints_collection_item_format`. This filter is executed only if
+`ln_endpoints_collection_enable_filter_format` has been updated as mentioned
 before. This filter has different params.
 
 - `$default_format`, this is an array with the default information that
