@@ -72,12 +72,11 @@ class Collection extends AbstractEndpoint {
 		$data = [];
 
 		$this->query = new \WP_Query( $this->args );
-		$this->format_item = apply_filters( Filter::ITEM_IS_ENABLED, false, $this->args );
-
 		while ( $this->query->have_posts() ) {
 			$this->query->the_post();
 			$data[] = $this->format_item( $this->query->post );
 		}
+
 		wp_reset_postdata();
 
 		return [
@@ -89,17 +88,73 @@ class Collection extends AbstractEndpoint {
 	/**
 	 * This function allow to format every item that is returned to the endpoint
 	 * the filter sends 3 params to the user so can be more easy to manipulate the
-	 * data based on certaim params.
+	 * data based on certain params.
 	 *
-	 * @param \WP_Post $the_post Current post object.
 	 * @return array The formated data from every item.
 	 */
-	protected function format_item( \WP_Post $the_post ) {
-		$item = [ 'id' => $the_post->ID ];
-		if ( $this->format_item ) {
-			$item = apply_filters( Filter::ITEM_FORMAT, $item, $the_post, $this->args );
+	protected function format_item() {
+		$the_post = get_post();
+
+		// Author.
+		$the_author = get_userdata( $the_post->post_author );
+
+		// Thumbnail.
+		if ( has_post_thumbnail( $the_post->ID ) ) {
+			$size = apply_filters( Filter::THUMBNAIL_SIZE, 'thumbnail', $the_post );
+
+			$attachment_id = get_post_thumbnail_id( $the_post->ID );
+
+			$src = wp_get_attachment_image_src( $attachment_id, $size );
+
+			$thumbnail = [
+				'src' 		=> $src[0],
+				'width'		=> $src[1],
+				'height'	=> $src[2],
+				'alt'		=> get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ),
+			];
+		} else {
+			$thumbnail = false;
 		}
-		return $item;
+
+		// Taxonomies.
+		$taxonomies = get_object_taxonomies( $the_post );
+
+		$post_terms = [];
+
+		foreach ( $taxonomies as $taxonomy ) {
+			$post_terms[ $taxonomy ] = [];
+
+			$terms = wp_get_post_terms( $the_post->ID, $taxonomy );
+
+			foreach ( $terms as $term ) {
+				$post_terms[ $taxonomy ][] = [
+					'id' => $term->term_id,
+					'name' => $term->name,
+					'slug' => $term->slug,
+					'description' => $term->description,
+				];
+			}
+		}
+
+		// Put it all together.
+		$item = [
+			'id' => $the_post->ID,
+			'title' => $the_post->post_title,
+			'link' => get_permalink( $the_post->ID ),
+			'slug' => $the_post->post_name,
+			'excerpt' => get_the_excerpt(),
+			'author' => [
+				'id' => $the_author->ID,
+				'first_name' => $the_author->first_name,
+				'last_name' => $the_author->last_name,
+				'posts_link' => str_replace( site_url(), '', get_author_posts_url( $the_author->ID ) ),
+			],
+			'date' => $the_post->post_date_gmt,
+			'thumbnail' => $thumbnail,
+			'terms' => $post_terms,
+		];
+
+		return apply_filters( Filter::ITEM_FORMAT, $item, $the_post, $this->args );
 	}
 
 	/**
