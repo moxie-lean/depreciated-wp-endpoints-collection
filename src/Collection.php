@@ -2,6 +2,7 @@
 
 use Leean\AbstractEndpoint;
 use Lean\Endpoints\Collection\Filter;
+use Lean\Endpoints\Collection\Post;
 
 /**
  * Class that returns a collection of posts using dynamic arguments.
@@ -72,12 +73,11 @@ class Collection extends AbstractEndpoint {
 		$data = [];
 
 		$this->query = new \WP_Query( $this->args );
-		$this->format_item = apply_filters( Filter::ITEM_IS_ENABLED, false, $this->args );
-
 		while ( $this->query->have_posts() ) {
 			$this->query->the_post();
 			$data[] = $this->format_item( $this->query->post );
 		}
+
 		wp_reset_postdata();
 
 		return [
@@ -89,17 +89,33 @@ class Collection extends AbstractEndpoint {
 	/**
 	 * This function allow to format every item that is returned to the endpoint
 	 * the filter sends 3 params to the user so can be more easy to manipulate the
-	 * data based on certaim params.
+	 * data based on certain params.
 	 *
-	 * @param \WP_Post $the_post Current post object.
 	 * @return array The formated data from every item.
 	 */
-	protected function format_item( \WP_Post $the_post ) {
-		$item = [ 'id' => $the_post->ID ];
-		if ( $this->format_item ) {
-			$item = apply_filters( Filter::ITEM_FORMAT, $item, $the_post, $this->args );
-		}
-		return $item;
+	protected function format_item() {
+		$the_post = get_post();
+
+		$the_author = get_userdata( $the_post->post_author );
+
+		$item = [
+			'id' => $the_post->ID,
+			'title' => $the_post->post_title,
+			'link' => get_permalink( $the_post->ID ),
+			'slug' => $the_post->post_name,
+			'excerpt' => get_the_excerpt(),
+			'author' => [
+				'id' => $the_author->ID,
+				'first_name' => $the_author->first_name,
+				'last_name' => $the_author->last_name,
+				'posts_link' => str_replace( home_url(), '', get_author_posts_url( $the_author->ID ) ),
+			],
+			'date' => strtotime( $the_post->post_date_gmt ),
+			'thumbnail' => Post::get_thumbnail( $the_post, $this->args ),
+			'terms' => Post::get_terms( $the_post ),
+		];
+
+		return apply_filters( Filter::ITEM_FORMAT, $item, $the_post, $this->args );
 	}
 
 	/**

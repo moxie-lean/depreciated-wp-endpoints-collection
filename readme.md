@@ -105,7 +105,7 @@ wp-json/leean/v1/collection?cat=2
 There are 3 filters that can be used on this particular endpoint.
 
 `ln_endpoints_data_collection`. This filter allow you to overwrite the
-data after processing and before is send to the client it has 1
+data after processing and before is sending it to the client it has 1
 parameter that can be used on the filter: 
 
  - `$data` The original data created by the endpoint, this is an array
@@ -122,51 +122,18 @@ add_filter('ln_endpoints_data_collection', function( $data ){
 });
 ```
 
-`ln_endpoints_collection_enable_filter_format`. By default the format of the items
-is disabled, in order to prevent not required functions if you don't
-require to format the default output of the endpoint, if you want to
-enable the format filter you need change this filter as follows:
+`ln_endpoints_collection_item`. Allows you to easily customise the output of each post:
 
 ```php
-add_filter( 'ln_collection_enable_filter_format', '__return_true' );
-```
-
-The filter has 2 params: 
-
-- `$enable_filter`, by default is false,
-- `$args` The arguments that were used to create the endpoint so you can
-  return dynamically the value based on the query made to the endpoint.
-
-And if you want to disable the format you only need to remove the
-filter.
-
-`ln_endpoints_collection_item_format`. This filter is executed only if
-`ln_endpoints_collection_enable_filter_format` has been updated as mentioned
-before. This filter has different params.
-
-- `$default_format`, this is an array with the default information that
-  every endpoint returns
-- `$the_post`, this is a `WP_Post` object that allow you to easily
-  access to the ID, title, content or any other data of the current
-item.
-- `$args`, this are the arguments used to create the request, for
-  example here you can get what post type was requested, (basically the
-`GET` params that create the endpoint).
-
-For example imagine you want to return a message if the post has the ID
-1 and the default format otherwise.
-
-```php
-add_filter( 'ln_collection_enable_filter_format', '__return_true' );
-add_filter( 'ln_collection_item_format', function($default_format, $the_post){
-  if ( $the_post->ID === 1 ) {
-    return [
-     'message' => 'Nothing here',
-    ];
-  } else {
-    return $default_format;
-  }
-}, 10, 2);
+add_filter( 'ln_endpoints_collection_item', function($item, $the_post) {
+      if ( $the_post->ID === 1 ) {
+        return [
+         'message' => 'Nothing here',
+        ];
+      } else {
+        return $item;
+      }
+    }, 10, 2);;
 ```
 
 Or for example that you want to return only the titles if the user
@@ -181,4 +148,12 @@ add_filter( 'ln_collection_item_format', function($default_format, $the_post, $a
     return $default_format;
   }
 }, 10, 3);
+```
+
+`ln_endpoints_collection_thumbnail_size`. Allows you set the image size:
+
+```php
+add_filter( 'ln_endpoints_collection_thumbnail_size', function($size, $the_post, $args) {
+      return 'thumbnail';
+}, 10, 3);;
 ```
