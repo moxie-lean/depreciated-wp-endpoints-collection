@@ -7,6 +7,13 @@
  * @since 0.1.0
  */
 class Post {
+	/**
+	 * Get the thumbnail
+	 *
+	 * @param \WP_Post $the_post The post.
+	 * @param array    $args	 The query args.
+	 * @return array
+	 */
 	public static function get_thumbnail( $the_post, $args ) {
 		$thumbnail = [
 			'src' 		=> '',
@@ -35,6 +42,12 @@ class Post {
 		return $thumbnail;
 	}
 
+	/**
+	 * Get all taxonomies and terms for this post.
+	 *
+	 * @param \WP_Post $the_post The post.
+	 * @return array
+	 */
 	public static function get_terms( $the_post ) {
 		$taxonomies = get_object_taxonomies( $the_post );
 
