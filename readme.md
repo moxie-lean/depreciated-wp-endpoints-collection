@@ -153,7 +153,7 @@ add_filter( 'ln_collection_item_format', function($default_format, $the_post, $a
 `ln_endpoints_collection_thumbnail_size`. Allows you set the image size:
 
 ```php
-add_filter( 'ln_endpoints_collection_thumbnail_size', function($size, $the_post) {
+add_filter( 'ln_endpoints_collection_thumbnail_size', function($size, $the_post, $args) {
       return 'thumbnail';
-}, 10, 2);;
+}, 10, 3);;
 ```

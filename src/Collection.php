@@ -2,6 +2,7 @@
 
 use Leean\AbstractEndpoint;
 use Lean\Endpoints\Collection\Filter;
+use Lean\Endpoints\Collection\Post;
 
 /**
  * Class that returns a collection of posts using dynamic arguments.
@@ -95,48 +96,8 @@ class Collection extends AbstractEndpoint {
 	protected function format_item() {
 		$the_post = get_post();
 
-		// Author.
 		$the_author = get_userdata( $the_post->post_author );
 
-		// Thumbnail.
-		if ( has_post_thumbnail( $the_post->ID ) ) {
-			$size = apply_filters( Filter::THUMBNAIL_SIZE, 'thumbnail', $the_post );
-
-			$attachment_id = get_post_thumbnail_id( $the_post->ID );
-
-			$src = wp_get_attachment_image_src( $attachment_id, $size );
-
-			$thumbnail = [
-				'src' 		=> $src[0],
-				'width'		=> $src[1],
-				'height'	=> $src[2],
-				'alt'		=> get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ),
-			];
-		} else {
-			$thumbnail = false;
-		}
-
-		// Taxonomies.
-		$taxonomies = get_object_taxonomies( $the_post );
-
-		$post_terms = [];
-
-		foreach ( $taxonomies as $taxonomy ) {
-			$post_terms[ $taxonomy ] = [];
-
-			$terms = wp_get_post_terms( $the_post->ID, $taxonomy );
-
-			foreach ( $terms as $term ) {
-				$post_terms[ $taxonomy ][] = [
-					'id' => $term->term_id,
-					'name' => $term->name,
-					'slug' => $term->slug,
-					'description' => $term->description,
-				];
-			}
-		}
-
-		// Put it all together.
 		$item = [
 			'id' => $the_post->ID,
 			'title' => $the_post->post_title,
@@ -147,11 +108,11 @@ class Collection extends AbstractEndpoint {
 				'id' => $the_author->ID,
 				'first_name' => $the_author->first_name,
 				'last_name' => $the_author->last_name,
-				'posts_link' => str_replace( site_url(), '', get_author_posts_url( $the_author->ID ) ),
+				'posts_link' => str_replace( home_url(), '', get_author_posts_url( $the_author->ID ) ),
 			],
 			'date' => $the_post->post_date_gmt,
-			'thumbnail' => $thumbnail,
-			'terms' => $post_terms,
+			'thumbnail' => Post::get_thumbnail( $the_post, $this->args ),
+			'terms' => Post::get_terms( $the_post ),
 		];
 
 		return apply_filters( Filter::ITEM_FORMAT, $item, $the_post, $this->args );
