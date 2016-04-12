@@ -72,16 +72,24 @@ class Collection extends AbstractEndpoint {
 	protected function loop() {
 		$data = [];
 
+		$meta = [];
+
 		$this->query = new \WP_Query( $this->args );
 		while ( $this->query->have_posts() ) {
 			$this->query->the_post();
 			$data[] = $this->format_item( $this->query->post );
+
+			if ( empty( $meta ) ) {
+				// Take the metadata from the first post.
+				$meta = \Lean\Utils\Meta\Collection::get_all_collection_meta( $this->query->post );
+			}
 		}
 
 		wp_reset_postdata();
 
 		return [
 			'data' => $data,
+			'meta' => $meta,
 			'pagination' => $this->get_pagination(),
 		];
 	}
