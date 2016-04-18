@@ -64,7 +64,10 @@ class Collection extends AbstractCollectionEndpoint {
 		return [
 			'data' => $data,
 			'meta' => $meta,
-			'pagination' => $this->get_pagination(),
+			'pagination' => $this->get_pagination(
+				$this->query->found_posts,
+				$this->query->max_num_pages
+			)
 		];
 	}
 
@@ -97,25 +100,6 @@ class Collection extends AbstractCollectionEndpoint {
 		];
 
 		return apply_filters( Filter::ITEM_FORMAT, $item, $the_post, $this->args );
-	}
-
-	/**
-	 * Returns the data related with the pagination, useful to
-	 * iterate over the data in the FE on a infinite scroll or load more
-	 * buttons since we know if there are more pages ahead.
-	 *
-	 * @return array The array with the formated data.
-	 */
-	protected function get_pagination() {
-		$total = absint( $this->query->found_posts );
-		$meta = [
-			'items' => $total,
-			'pages' => 0,
-		];
-		if ( $total > 0 ) {
-			$meta['pages'] = $this->query->max_num_pages;
-		}
-		return $meta;
 	}
 
 	/**
