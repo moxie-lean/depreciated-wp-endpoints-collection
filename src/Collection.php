@@ -67,7 +67,7 @@ class Collection extends AbstractCollectionEndpoint {
 			'pagination' => $this->get_pagination(
 				$this->query->found_posts,
 				$this->query->max_num_pages
-			)
+			),
 		];
 	}
 
