@@ -57,6 +57,7 @@ class Collection extends AbstractCollectionEndpoint {
 	 * the filter sends 3 params to the user so can be more easy to manipulate the
 	 * data based on certain params.
 	 *
+	 * @param object $the_post The post object to format.
 	 * @return array The formated data from every item.
 	 */
 	protected function format_item( $the_post ) {
