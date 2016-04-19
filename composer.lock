@@ -4,13 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "hash": "2d41289c1ee3f9126c098a8a84604379",
-    "content-hash": "583722eec93268600c2c874e307c5757",
-=======
     "hash": "0d5f20f49e97762fa4dc5d08c469bf19",
     "content-hash": "ded7553dff350de9ce973dece24c11dd",
->>>>>>> master
     "packages": [
         {
             "name": "moxie-lean/wp-elements",
@@ -144,8 +139,7 @@
             ],
             "description": "wp-endpoint",
             "homepage": "https://github.com/moxie-leean/wp-endpoints-post/",
-<<<<<<< HEAD
-            "time": "2016-04-03 20:44:48"
+            "time": "2016-04-19 14:24:34"
         },
         {
             "name": "moxie-leean/wp-utils",
@@ -159,22 +153,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/moxie-leean/wp-utils/zipball/8e292ff5b8082a324e946db3a5f49f2c69d03a4d",
                 "reference": "8e292ff5b8082a324e946db3a5f49f2c69d03a4d",
-=======
-            "time": "2016-04-19 14:24:34"
-        },
-        {
-            "name": "moxie-leean/wp-utils",
-            "version": "0.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/moxie-leean/wp-utils.git",
-                "reference": "0b1af9e04bc0273c02135bf6f118fa80de8c3589"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/moxie-leean/wp-utils/zipball/0b1af9e04bc0273c02135bf6f118fa80de8c3589",
-                "reference": "0b1af9e04bc0273c02135bf6f118fa80de8c3589",
->>>>>>> master
                 "shasum": ""
             },
             "require": {
@@ -211,11 +189,7 @@
             "keywords": [
                 "wordpress"
             ],
-<<<<<<< HEAD
             "time": "2016-04-19 22:49:14"
-=======
-            "time": "2016-04-18 17:25:39"
->>>>>>> master
         }
     ],
     "packages-dev": [
