@@ -1,6 +1,6 @@
 <?php namespace Lean\Endpoints;
 
-use Leean\AbstractEndpoint;
+use Leean\AbstractCollectionEndpoint;
 use Lean\Endpoints\Collection\Filter;
 use Lean\Endpoints\Collection\Post;
 
@@ -9,7 +9,7 @@ use Lean\Endpoints\Collection\Post;
  *
  * @package Lean\Endpoints;
  */
-class Collection extends AbstractEndpoint {
+class Collection extends AbstractCollectionEndpoint {
 
 	/**
 	 * Path of the new endpoint.
@@ -20,14 +20,6 @@ class Collection extends AbstractEndpoint {
 	 * @var String
 	 */
 	protected $endpoint = '/collection';
-
-	/**
-	 * Array that holds all the shared arguments used for query the site.
-	 *
-	 * @since 0.1.0
-	 * @var array
-	 */
-	protected $args = [];
 
 	/**
 	 * Object that holds the current queried object on the site.
@@ -45,24 +37,6 @@ class Collection extends AbstractEndpoint {
 	 * @var bool
 	 */
 	protected $format_item = false;
-
-	/**
-	 * Function inherint from the parant Abstract class that is called once the
-	 * endpoint has been initiated and the method that returns the data delivered
-	 * to the endpoint.
-	 *
-	 * @Override
-	 *
-	 * @since 0.1.0
-	 *
-	 * @param \WP_REST_Request $request The request object that mimics the request
-	 *									made by the user.
-	 * @return array The data to be delivered to the endpoint
-	 */
-	public function endpoint_callback( \WP_REST_Request $request ) {
-		$this->args = $request->get_params();
-		return $this->filter_data( $this->loop() );
-	}
 
 	/**
 	 * WP_Query Loop that has been triggered from the endpoint.
@@ -90,7 +64,10 @@ class Collection extends AbstractEndpoint {
 		return [
 			'data' => $data,
 			'meta' => $meta,
-			'pagination' => $this->get_pagination(),
+			'pagination' => $this->get_pagination(
+				$this->query->found_posts,
+				$this->query->max_num_pages
+			),
 		];
 	}
 
@@ -99,11 +76,10 @@ class Collection extends AbstractEndpoint {
 	 * the filter sends 3 params to the user so can be more easy to manipulate the
 	 * data based on certain params.
 	 *
+	 * @param object $the_post The post object to format.
 	 * @return array The formated data from every item.
 	 */
-	protected function format_item() {
-		$the_post = get_post();
-
+	protected function format_item( $the_post ) {
 		$the_author = get_userdata( $the_post->post_author );
 
 		$item = [
@@ -124,25 +100,6 @@ class Collection extends AbstractEndpoint {
 		];
 
 		return apply_filters( Filter::ITEM_FORMAT, $item, $the_post, $this->args );
-	}
-
-	/**
-	 * Returns the data related with the pagination, useful to
-	 * iterate over the data in the FE on a infinite scroll or load more
-	 * buttons since we know if there are more pages ahead.
-	 *
-	 * @return array The array with the formated data.
-	 */
-	protected function get_pagination() {
-		$total = absint( $this->query->found_posts );
-		$meta = [
-			'items' => $total,
-			'pages' => 0,
-		];
-		if ( $total > 0 ) {
-			$meta['pages'] = $this->query->max_num_pages;
-		}
-		return $meta;
 	}
 
 	/**
