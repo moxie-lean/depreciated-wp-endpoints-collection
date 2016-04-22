@@ -45,9 +45,9 @@ class Collection extends AbstractCollectionEndpoint {
 	 */
 	protected function loop() {
 		$data = [];
-
 		$meta = [];
 
+		$this->args = apply_filters( Filter::COLLECTION_ARGS, $this->args );
 		$this->query = new \WP_Query( $this->args );
 		while ( $this->query->have_posts() ) {
 			$this->query->the_post();
@@ -61,7 +61,7 @@ class Collection extends AbstractCollectionEndpoint {
 
 		wp_reset_postdata();
 
-		return [
+		$response = [
 			'data' => $data,
 			'meta' => $meta,
 			'pagination' => $this->get_pagination(
@@ -69,6 +69,8 @@ class Collection extends AbstractCollectionEndpoint {
 				$this->query->max_num_pages
 			),
 		];
+
+		return apply_filters( Filter::COLLECTION_DATA, $response );
 	}
 
 	/**

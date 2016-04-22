@@ -8,5 +8,6 @@
  */
 class Filter {
 	const ITEM_FORMAT = 'ln_endpoints_collection_item';
-	const THUMBNAIL_SIZE = 'ln_endpoints_collection_thumbnail_size';
+	const COLLECTION_DATA = 'ln_endpoints_collection_data';
+	const COLLECTION_ARGS = 'ln_endpoints_collection_args';
 }
