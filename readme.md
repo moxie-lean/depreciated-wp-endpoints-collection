@@ -102,9 +102,13 @@ wp-json/leean/v1/collection?cat=2
 
 ## Filters
 
-There are 3 filters that can be used on this particular endpoint.
+There are filters that can be used on this particular endpoint.
 
-`ln_endpoints_data_collection`. This filter allow you to overwrite the
+`ln_endpoints_collection_args`. This filter allow you to overwrite the
+default arguments used to query inside of the collection so you can
+overwrite the default values used on the `WP_Query` before executed.
+
+`ln_endpoints_collection_data`. This filter allow you to overwrite the
 data after processing and before is sending it to the client it has 1
 parameter that can be used on the filter: 
 
@@ -113,7 +117,7 @@ parameter that can be used on the filter:
 if the data has zero items.
 
 ```php
-add_filter('ln_endpoints_data_collection', function( $data ){
+add_filter('ln_endpoints_collection_data', function( $data ){
   if ( isset( $data['pagination']['items'] ) && $data['pagination']['items'] === 0 ) {
     return [];
   } else {
@@ -136,24 +140,3 @@ add_filter( 'ln_endpoints_collection_item', function($item, $the_post) {
     }, 10, 2);;
 ```
 
-Or for example that you want to return only the titles if the user
-request for pages only.
-
-```php
-add_filter( 'ln_collection_enable_filter_format', '__return_true' );
-add_filter( 'ln_collection_item_format', function($default_format, $the_post, $args){
-  if ( $args['post_type'] === 'page' ) {
-    return [ 'title' => $the_post->post_title ];
-  } else {
-    return $default_format;
-  }
-}, 10, 3);
-```
-
-`ln_endpoints_collection_thumbnail_size`. Allows you set the image size:
-
-```php
-add_filter( 'ln_endpoints_collection_thumbnail_size', function($size, $the_post, $args) {
-      return 'thumbnail';
-}, 10, 3);;
-```
