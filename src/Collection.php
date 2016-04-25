@@ -2,7 +2,7 @@
 
 use Lean\AbstractCollectionEndpoint;
 use Lean\Endpoints\Collection\Filter;
-use Lean\Endpoints\Collection\Post;
+use Lean\Endpoints\Collection\PostUtils;
 
 /**
  * Class that returns a collection of posts using dynamic arguments.
@@ -97,8 +97,8 @@ class Collection extends AbstractCollectionEndpoint {
 				'posts_link' => str_replace( home_url(), '', get_author_posts_url( $the_author->ID ) ),
 			],
 			'date' => strtotime( $the_post->post_date_gmt ),
-			'thumbnail' => Post::get_thumbnail( $the_post, $this->args ),
-			'terms' => Post::get_terms( $the_post ),
+			'thumbnail' => PostUtils::get_thumbnail( $the_post, $this->args ),
+			'terms' => PostUtils::get_terms( $the_post ),
 		];
 
 		return apply_filters( Filter::ITEM_FORMAT, $item, $the_post, $this->args );
