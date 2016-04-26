@@ -6,7 +6,7 @@
  * @package Endpoints\Collection;
  * @since 0.1.0
  */
-class PostUtils {
+class Post {
 	/**
 	 * Get the thumbnail
 	 *
