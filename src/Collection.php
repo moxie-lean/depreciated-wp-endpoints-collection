@@ -1,8 +1,7 @@
 <?php namespace Lean\Endpoints;
 
 use Lean\AbstractCollectionEndpoint;
-use Lean\Endpoints\Collection\Filter;
-use Lean\Endpoints\Collection\Post;
+use Lean\Endpoints\Collection;
 
 /**
  * Class that returns a collection of posts using dynamic arguments.
@@ -47,7 +46,7 @@ class Collection extends AbstractCollectionEndpoint {
 		$data = [];
 		$meta = [];
 
-		$this->args = apply_filters( Filter::COLLECTION_ARGS, $this->args );
+		$this->args = apply_filters( Collection\Filter::COLLECTION_ARGS, $this->args );
 		$this->query = new \WP_Query( $this->args );
 		while ( $this->query->have_posts() ) {
 			$this->query->the_post();
@@ -70,7 +69,7 @@ class Collection extends AbstractCollectionEndpoint {
 			),
 		];
 
-		return apply_filters( Filter::COLLECTION_DATA, $response );
+		return apply_filters( Collection\Filter::COLLECTION_DATA, $response );
 	}
 
 	/**
@@ -97,11 +96,11 @@ class Collection extends AbstractCollectionEndpoint {
 				'posts_link' => str_replace( home_url(), '', get_author_posts_url( $the_author->ID ) ),
 			],
 			'date' => strtotime( $the_post->post_date_gmt ),
-			'thumbnail' => Post::get_thumbnail( $the_post, $this->args ),
-			'terms' => Post::get_terms( $the_post ),
+			'thumbnail' => Collection\Post::get_thumbnail( $the_post, $this->args ),
+			'terms' => Collection\Post::get_terms( $the_post ),
 		];
 
-		return apply_filters( Filter::ITEM_FORMAT, $item, $the_post, $this->args );
+		return apply_filters( Collection\Filter::ITEM_FORMAT, $item, $the_post, $this->args );
 	}
 
 	/**
