@@ -95,7 +95,7 @@ class Collection extends AbstractCollectionEndpoint {
 				'last_name' => $the_author->last_name,
 				'posts_link' => str_replace( home_url(), '', get_author_posts_url( $the_author->ID ) ),
 			],
-			'date' => strtotime( $the_post->post_date_gmt ),
+			'date' => strtotime( $the_post->post_date_gmt ) * 1000,
 			'thumbnail' => Collection\Post::get_thumbnail( $the_post, $this->args ),
 			'terms' => Collection\Post::get_terms( $the_post ),
 		];
