@@ -69,7 +69,7 @@ class Collection extends AbstractCollectionEndpoint {
 			),
 		];
 
-		return apply_filters( Collection\Filter::COLLECTION_DATA, $response );
+		return apply_filters( Collection\Filter::COLLECTION_DATA, $response, $this->args );
 	}
 
 	/**
