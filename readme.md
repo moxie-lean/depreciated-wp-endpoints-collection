@@ -118,6 +118,8 @@ parameter that can be used on the filter:
    with all the data, for example if you want to return an empty array
 if the data has zero items.
 
+ - `$request` An array with the arguments used to create the request.
+
 ```php
 add_filter('ln_endpoints_collection_data', function( $data ){
   if ( isset( $data['pagination']['items'] ) && $data['pagination']['items'] === 0 ) {
